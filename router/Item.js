@@ -3,17 +3,19 @@ const router = express.Router();
 const Item = require('../models/items');
 const categories = require('../models/category');
 
-//fetching all category  by itemId
-router.get('/:id', async (req,res) =>{
-  try{
-    const it = await Item.findById({_id: req.params.id});
-   // console.log(req.params.itemName);
-    res.json(it);
-   
-  }catch(err){
-    res.json({message:err});
+
+router.get('/findByCategory/:categoryName', async(request, response) =>{
+  categoryName = request.params.categoryName;
+  console.log(categoryName);
+  let list = await Item.find({isActive : true});
+  let res = [];
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].category.categoryName == categoryName) {
+      res.push(list[i]);
+    }
   }
-});
+  response.json(res);
+})
 
 
 //add item
@@ -39,7 +41,7 @@ router.post('/',  async (req,res) => {
 
 
 //get all items
-router.get('/itemss', async (req,res) => {
+router.get('/all', async (req,res) => {
     try{
         const categor = await Item.find();
         res.json(categor);
@@ -50,24 +52,11 @@ router.get('/itemss', async (req,res) => {
 
 
 //update the items
-router.put('/:id', async (req,res) =>{
+router.put('/updateItem/:id', async (req,res) =>{
   try{
-    const ite = await Item.findByIdAndUpdate({_id:req.params.id},{
-      $set:{
-        name:req.body.name,
-        code:req.body.code,
-        itemName:req.body.itemName,
-        price:req.body.price,
-        category:req.body.category,
-        isCustomisable:req.body.isCustomisable,
-        isActive:req.body.isActive,
-        Description:req.body.Description,
-        OrderingImage:req.body.OrderingImage
-
-      }
-    
-    })
-    res.json({message:"updated"});
+    const item = await Item.findByIdAndUpdate({_id:req.params.id}, req.body);
+   res.json({message:"Item update",
+              updatedItem : item});
   }
   catch(err){
     res.json({message:err});
@@ -77,9 +66,13 @@ router.put('/:id', async (req,res) =>{
 
 
 //delete the items
-router.delete('/:itId', async (req,res) =>{
+router.delete('/deleteItem/:itId', async (req,res) =>{
   try{
-      const removedata = await Item.remove({_id: req.params.itId });
+      const removedata = await Item.findOneAndUpdate({_id: req.params.itId},{
+        $set:{
+          isActive : false
+        }
+      });
       res.json({message: "deleted"});
   }
   catch(err){

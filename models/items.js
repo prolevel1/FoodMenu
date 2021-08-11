@@ -1,18 +1,7 @@
 const mongoose = require('mongoose');
-//var ObjectId = require('mongodb').ObjectID;
+
 var Schema = mongoose.Schema;
-// const categorySchema = new Schema({
-//     categoryName:{
-//         type: String,
-//         required:true
 
-//     },
-//     Descrip:{
-//         type: String,
-    
-
-//     }
-// });
 const itemSchema = new Schema({
     name:{
         type: String,
@@ -44,9 +33,6 @@ const itemSchema = new Schema({
     },
    
 
-    // ItemType:{
-
-    // },
     isCustomisable:{
         type: Boolean,
         required:true
