@@ -23,6 +23,7 @@ router.get('/findByCategory/:categoryName', async(request, response) =>{
      
          
  }
+ response.json(res);
 
 })
 
