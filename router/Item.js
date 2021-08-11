@@ -6,15 +6,24 @@ const categories = require('../models/category');
 
 router.get('/findByCategory/:categoryName', async(request, response) =>{
   categoryName = request.params.categoryName;
-  console.log(categoryName);
-  let list = await Item.find({isActive : true});
+  //console.log(categoryName);
   let res = [];
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].category.categoryName == categoryName) {
-      res.push(list[i]);
-    }
+  let list = await Item.find({isActive : true});
+  for (var i = 0; i < list.length; i++) {
+    
+    
+  for(var j = 0; j <  list[i].category.length; j++){
+  
+   if(list[i].category[j].categoryName == categoryName){
+    res.push(list[i]);
+   }
   }
-  response.json(res);
+    
+         
+     
+         
+ }
+
 })
 
 
